@@ -1,0 +1,263 @@
+{
+  "tenants": [
+    {
+      "id": "acme-001",
+      "name": "🏢 Acme Corporation",
+      "description": "Acme Corp API Suite",
+      "apis": [
+        {
+          "id": "acme-users",
+          "name": "User Management API",
+          "description": "Authentication & user management",
+          "baseUrl": "https://api.acme.com/v1",
+          "version": "1.0.0",
+          "contact": {
+            "name": "Acme Support",
+            "email": "support@acme.com"
+          },
+          "license": {
+            "name": "Apache 2.0"
+          },
+          "endpoints": [
+            {
+              "path": "/users",
+              "method": "GET",
+              "summary": "List all users",
+              "description": "Retrieve a paginated list of users",
+              "tags": ["Users"],
+              "parameters": [
+                {
+                  "name": "page",
+                  "in": "query",
+                  "description": "Page number",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "description": "Items per page",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "example": 20
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Successful response",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "users": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string",
+                                  "format": "email"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "path": "/users",
+              "method": "POST",
+              "summary": "Create a new user",
+              "description": "Create a new user in the system",
+              "tags": ["Users"],
+              "requestBody": {
+                "description": "User details",
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "password": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["name", "email", "password"]
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "User created successfully"
+                },
+                "400": {
+                  "description": "Invalid request"
+                }
+              }
+            },
+            {
+              "path": "/users/{id}",
+              "method": "GET",
+              "summary": "Get user by ID",
+              "description": "Retrieve a specific user by their ID",
+              "tags": ["Users"],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "User ID",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "User found"
+                },
+                "404": {
+                  "description": "User not found"
+                }
+              }
+            }
+          ],
+          "tags": [
+            {
+              "name": "Users",
+              "description": "User management endpoints"
+            }
+          ]
+        },
+        {
+          "id": "acme-products",
+          "name": "Product Catalog API",
+          "description": "Product & inventory management",
+          "baseUrl": "https://api.acme.com/v1",
+          "version": "1.0.0",
+          "endpoints": [
+            {
+              "path": "/products",
+              "method": "GET",
+              "summary": "List all products",
+              "tags": ["Products"],
+              "parameters": [
+                {
+                  "name": "category",
+                  "in": "query",
+                  "description": "Product category",
+                  "required": false,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "List of products"
+                }
+              }
+            },
+            {
+              "path": "/products/{id}",
+              "method": "GET",
+              "summary": "Get product by ID",
+              "tags": ["Products"],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "Product ID",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Product details"
+                },
+                "404": {
+                  "description": "Product not found"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beta-001",
+      "name": "🚀 Beta Inc",
+      "description": "Beta Inc API Suite",
+      "apis": [
+        {
+          "id": "beta-analytics",
+          "name": "Analytics API",
+          "description": "Real-time analytics and reporting",
+          "baseUrl": "https://api.beta.com/v1",
+          "version": "2.0.0",
+          "endpoints": [
+            {
+              "path": "/analytics/events",
+              "method": "POST",
+              "summary": "Track an event",
+              "tags": ["Events"],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "event_name": {
+                          "type": "string"
+                        },
+                        "user_id": {
+                          "type": "string"
+                        },
+                        "properties": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Event tracked successfully"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

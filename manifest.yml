@@ -1,0 +1,13 @@
+---
+applications:
+  - name: openapi-hub
+    memory: 512M
+    instances: 1
+    buildpacks:
+      - nodejs_buildpack
+    command: npm start
+    routes:
+      - route: openapi-hub.cfapps.us-south.containers.cloud.ibm.com
+    env:
+      NODE_ENV: production
+      PORT: 8080
