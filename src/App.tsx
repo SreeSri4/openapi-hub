@@ -1,37 +1,20 @@
-import React, { useState } from 'react';
-import { useAppState } from './hooks/useAppState';
-import { FileUploadArea } from './components/FileUploadArea';
-import { TenantTree } from './components/TenantTree';
-import { SpecViewer } from './components/SpecViewer';
-import { DownloadPanel } from './components/DownloadPanel';
-import { Header } from './components/Header';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import TenantsPage from "./pages/TenantsPage";
+import TenantDetailPage from "./pages/TenantDetailPage";
+import ApisPage from "./pages/ApisPage";
+import EventsPage from "./pages/EventsPage";
+import FileTemplatesPage from "./pages/FileTemplatesPage";
 
-export const App: React.FC = () => {
-  const { tenants } = useAppState();
-  const [showUpload, setShowUpload] = useState(tenants.length === 0);
-
+export default function App() {
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      <Header onNewUpload={() => setShowUpload(true)} />
-
-      {showUpload && (
-        <div className="p-6 bg-white m-4 rounded-lg shadow">
-          <FileUploadArea onUploadSuccess={() => setShowUpload(false)} />
-        </div>
-      )}
-
-      <div className="flex flex-1 gap-4 p-4 overflow-hidden">
-        {/* Left Sidebar - Tenant Tree */}
-        <TenantTree tenants={tenants} />
-
-        {/* Main Panel - Spec Viewer */}
-        <div className="flex-1 flex flex-col bg-white rounded-lg shadow overflow-hidden">
-          <SpecViewer />
-          <DownloadPanel />
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<TenantsPage />} />
+        <Route path="/tenants/:tenantId" element={<TenantDetailPage />} />
+        <Route path="/tenants/:tenantId/apis" element={<ApisPage />} />
+        <Route path="/tenants/:tenantId/events" element={<EventsPage />} />
+        <Route path="/tenants/:tenantId/file-templates" element={<FileTemplatesPage />} />
+      </Routes>
+    </BrowserRouter>
   );
-};
-
-export default App;
+}
