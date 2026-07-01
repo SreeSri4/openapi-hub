@@ -9,11 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Serve static files from dist/public
-app.use(express.static(path.join(__dirname, '../public')));
+const staticPath = path.join(__dirname, '../../dist/public');
+app.use(express.static(staticPath));
 
 // SPA fallback - serve index.html for all routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
