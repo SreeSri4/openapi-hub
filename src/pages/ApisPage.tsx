@@ -1,66 +1,58 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { ApiEntry } from "../types/tenant";
+import { useTenantData } from "../context/TenantDataContext";
+
+const methodColor: Record<string, string> = {
+  GET: "bg-green-100 text-green-700",
+  POST: "bg-blue-100 text-blue-700",
+  PUT: "bg-amber-100 text-amber-700",
+  PATCH: "bg-amber-100 text-amber-700",
+  DELETE: "bg-red-100 text-red-700",
+};
 
 export default function ApisPage() {
   const { tenantId } = useParams();
   const navigate = useNavigate();
-  const [apis, setApis] = useState<ApiEntry[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { getTenant } = useTenantData();
+  const tenant = getTenant(tenantId!);
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setError(null);
-
-    try {
-      const text = await file.text();
-      const spec = JSON.parse(text);
-
-      const entry: ApiEntry = {
-        id: crypto.randomUUID(),
-        fileName: file.name,
-        uploadedAt: new Date().toISOString(),
-        spec,
-      };
-      setApis((prev) => [...prev, entry]);
-    } catch (err) {
-      setError("Invalid JSON file. Please upload a valid OpenAPI spec.");
-    } finally {
-      e.target.value = "";
-    }
-  };
+  if (!tenant) return <p className="max-w-5xl mx-auto px-6 py-10 text-gray-500">Tenant not found.</p>;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
+    <div className="max-w-6xl mx-auto px-6 py-10">
       <button onClick={() => navigate(`/tenants/${tenantId}`)} className="text-sm text-blue-600 mb-4">
-        ← Back to {tenantId}
+        ← Back to {tenant.name}
       </button>
-      <h1 className="text-2xl font-semibold text-gray-900">APIs — {tenantId}</h1>
-      <p className="text-gray-500 mt-1">Upload OpenAPI JSON specs for this tenant</p>
+      <h1 className="text-2xl font-semibold text-gray-900">APIs — {tenant.name}</h1>
+      <p className="text-gray-500 mt-1">{tenant.apis?.length ?? 0} API{tenant.apis?.length === 1 ? "" : "s"} available</p>
 
-      <label className="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer text-sm font-medium hover:bg-blue-700">
-        Upload OpenAPI JSON
-        <input type="file" accept=".json,application/json" className="hidden" onChange={handleUpload} />
-      </label>
-
-      {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
-
-      <div className="mt-8 space-y-3">
-        {apis.length === 0 && <p className="text-gray-400 text-sm">No APIs uploaded yet.</p>}
-        {apis.map((api) => (
-          <div key={api.id} className="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
-            <div>
-              <p className="font-medium text-gray-900">{api.spec?.info?.title ?? api.fileName}</p>
-              <p className="text-xs text-gray-500">
-                {api.fileName} · uploaded {new Date(api.uploadedAt).toLocaleString()}
-              </p>
-            </div>
-            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-              v{api.spec?.info?.version ?? "?"}
-            </span>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
+        {(tenant.apis ?? []).map((api) => {
+          const methods = Array.from(new Set(api.endpoints.map((e) => e.method.toUpperCase())));
+          return (
+            <button
+              key={api.id}
+              onClick={() => navigate(`/tenants/${tenantId}/apis/${api.id}`)}
+              className="text-left bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow p-5"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-blue-700 font-semibold text-lg">{api.name}</h2>
+                {api.version && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">v{api.version}</span>
+                )}
+              </div>
+              <p className="text-sm text-gray-600 mt-2">{api.description}</p>
+              {api.baseUrl && <p className="text-xs text-gray-400 mt-2 font-mono">{api.baseUrl}</p>}
+              <div className="flex flex-wrap gap-2 mt-3">
+                {methods.map((m) => (
+                  <span key={m} className={`text-xs font-medium px-2 py-0.5 rounded ${methodColor[m] ?? "bg-gray-100 text-gray-600"}`}>
+                    {m}
+                  </span>
+                ))}
+                <span className="text-xs text-gray-400 ml-auto">{api.endpoints.length} endpoints</span>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
