@@ -1,12 +1,57 @@
+export interface Parameter {
+  name: string;
+  in: string;
+  description?: string;
+  required?: boolean;
+  schema?: Record<string, any>;
+}
+
+export interface RequestBody {
+  description?: string;
+  required?: boolean;
+  content?: Record<string, any>;
+}
+
+export interface ResponseEntry {
+  description: string;
+  content?: Record<string, any>;
+}
+
+export interface Endpoint {
+  path: string;
+  method: string;
+  summary: string;
+  description?: string;
+  tags?: string[];
+  parameters?: Parameter[];
+  requestBody?: RequestBody;
+  responses?: Record<string, ResponseEntry>;
+}
+
+export interface ApiTag {
+  name: string;
+  description?: string;
+}
+
+export interface ApiSpec {
+  id: string;
+  name: string;
+  description?: string;
+  baseUrl?: string;
+  version?: string;
+  contact?: { name?: string; email?: string };
+  license?: { name?: string; url?: string };
+  endpoints: Endpoint[];
+  tags?: ApiTag[];
+}
+
 export interface Tenant {
   id: string;
   name: string;
-  description: string;
+  description?: string;
+  apis: ApiSpec[];
 }
 
-export interface ApiEntry {
-  id: string;
-  fileName: string;
-  uploadedAt: string;
-  spec: any; // parsed OpenAPI JSON
+export interface TenantData {
+  tenants: Tenant[];
 }
