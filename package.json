@@ -6,7 +6,8 @@
   "main": "dist/server/index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run build:server",
+    "build:server": "tsc src/server/index.ts --outDir dist --module esnext --target es2020 --moduleResolution node",
     "preview": "vite preview",
     "start": "node dist/server/index.js",
     "type-check": "tsc --noEmit",
