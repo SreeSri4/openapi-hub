@@ -4,7 +4,7 @@ import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 import { useTenantData } from "../context/TenantDataContext";
 import { convertToOpenAPI, specToJSON, specToYAML } from "../services/specConverter";
-import type { APIDefinition } from "../types";
+import type { APIDefinition, OAuth2Definition } from "../types";
 
 function slugify(value: string): string {
   return value
@@ -26,6 +26,29 @@ function downloadFile(content: string, filename: string, mimeType: string) {
   URL.revokeObjectURL(url);
 }
 
+// If the tenant JSON doesn't supply explicit oauth2 endpoints for an API,
+// fall back to conventional /oauth2/authorize + /oauth2/token paths off the
+// API's baseUrl so OAuth2 is still selectable in the Authorize dialog.
+// Tenants can override any of this via an `oauth2` block on the API entry.
+function resolveOAuth2Flows(baseUrl: string | undefined, override?: OAuth2Definition) {
+  if (override?.flows && Object.keys(override.flows).length > 0) {
+    return override.flows;
+  }
+  const root = (baseUrl ?? "").replace(/\/$/, "");
+  const scopes = { read: "Read access", write: "Write access" };
+  return {
+    authorizationCode: {
+      authorizationUrl: `${root}/oauth2/authorize`,
+      tokenUrl: `${root}/oauth2/token`,
+      scopes,
+    },
+    clientCredentials: {
+      tokenUrl: `${root}/oauth2/token`,
+      scopes,
+    },
+  };
+}
+
 export default function ApiDetailPage() {
   const { tenantId, apiId } = useParams();
   const navigate = useNavigate();
@@ -40,15 +63,18 @@ export default function ApiDetailPage() {
   const spec = useMemo(() => {
     if (!api) return null;
     const converted = convertToOpenAPI(api as unknown as APIDefinition);
+    const oauth2Flows = resolveOAuth2Flows(api.baseUrl, (api as any).oauth2);
+
     return {
       ...converted,
       components: {
         ...(converted as any).components,
         securitySchemes: {
           bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" },
+          oauth2: { type: "oauth2", flows: oauth2Flows },
         },
       },
-      security: [{ bearerAuth: [] }],
+      security: [{ bearerAuth: [] }, { oauth2: [] }],
     };
   }, [api]);
 
@@ -73,7 +99,7 @@ export default function ApiDetailPage() {
       <div className="bg-[#1b1b1b] text-white px-6 md:px-10 lg:px-16 py-3">
         <div className="w-full flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-4 min-w-0">
-            <span className="font-semibold tracking-wide text-sm whitespace-nowrap">🔌 Vistex Industry Templates API Hub</span>
+            <span className="font-semibold tracking-wide text-sm whitespace-nowrap">🔌 Vistex Industry Template API Hub</span>
             <button
               onClick={() => navigate(`/tenants/${tenantId}/apis`)}
               className="text-xs text-blue-300 hover:text-blue-200 whitespace-nowrap"
@@ -114,6 +140,7 @@ export default function ApiDetailPage() {
           docExpansion={collapsed ? "none" : "list"}
           defaultModelsExpandDepth={1}
           deepLinking
+          oauth2RedirectUrl={`${window.location.origin}/oauth2-redirect.html`}
         />
       </div>
     </div>

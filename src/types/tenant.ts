@@ -33,6 +33,22 @@ export interface ApiTag {
   description?: string;
 }
 
+export interface OAuth2FlowConfig {
+  authorizationUrl?: string;
+  tokenUrl?: string;
+  refreshUrl?: string;
+  scopes?: Record<string, string>;
+}
+
+export interface OAuth2Config {
+  flows: {
+    authorizationCode?: OAuth2FlowConfig;
+    implicit?: OAuth2FlowConfig;
+    clientCredentials?: OAuth2FlowConfig;
+    password?: OAuth2FlowConfig;
+  };
+}
+
 export interface ApiSpec {
   id: string;
   name: string;
@@ -43,6 +59,10 @@ export interface ApiSpec {
   license?: { name?: string; url?: string };
   endpoints: Endpoint[];
   tags?: ApiTag[];
+  // Optional per-API OAuth2 config. If omitted, the details page falls back
+  // to sensible defaults derived from baseUrl so OAuth2 is still selectable
+  // in the Authorize dialog; tenants can override with real endpoints here.
+  oauth2?: OAuth2Config;
 }
 
 export interface Tenant {

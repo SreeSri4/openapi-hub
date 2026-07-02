@@ -37,6 +37,22 @@ export interface SchemaDefinition {
   required?: string[];
 }
 
+export interface OAuth2FlowDefinition {
+  authorizationUrl?: string;
+  tokenUrl?: string;
+  refreshUrl?: string;
+  scopes?: Record<string, string>;
+}
+
+export interface OAuth2Definition {
+  flows: {
+    authorizationCode?: OAuth2FlowDefinition;
+    implicit?: OAuth2FlowDefinition;
+    clientCredentials?: OAuth2FlowDefinition;
+    password?: OAuth2FlowDefinition;
+  };
+}
+
 export interface APIDefinition {
   id: string;
   name: string;
@@ -54,6 +70,7 @@ export interface APIDefinition {
   };
   endpoints: EndpointDefinition[];
   tags?: Array<{ name: string; description?: string }>;
+  oauth2?: OAuth2Definition;
 }
 
 export interface Tenant {
