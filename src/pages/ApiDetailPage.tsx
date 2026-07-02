@@ -43,7 +43,7 @@ export default function ApiDetailPage() {
       <div className="bg-[#1b1b1b] text-white px-6 md:px-10 lg:px-16 py-3">
         <div className="w-full flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-4 min-w-0">
-            <span className="font-semibold tracking-wide text-sm whitespace-nowrap">🔌 Vistex Industry Template API Hub</span>
+            <span className="font-semibold tracking-wide text-sm whitespace-nowrap">🔌 Vistex Industry Templates API Hub</span>
             <button
               onClick={() => navigate(`/tenants/${tenantId}/apis`)}
               className="text-xs text-blue-300 hover:text-blue-200 whitespace-nowrap"
