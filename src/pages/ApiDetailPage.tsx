@@ -281,8 +281,10 @@ export default function ApiDetailPage() {
   // Build a genuine OpenAPI 3.0 document from the tenant's minimal API
   // definition, and expose it through the real Swagger UI component so the
   // page renders/behaves like an actual OpenAPI documentation site
-  // (try-it-out console, schemas, etc). Authorization itself is handled by
-  // our own panel above rather than Swagger UI's built-in Authorize dialog.
+  // (try-it-out console, schemas, etc). We intentionally do NOT declare any
+  // securitySchemes on the spec — that would make Swagger UI render its own
+  // native "Authorize" lock/dialog alongside our custom Authorize panel.
+  // Auth is handled entirely by our own panel + requestInterceptor below.
   const spec = useMemo(() => {
     if (!api) return null;
     return convertToOpenAPI(api as unknown as APIDefinition);
