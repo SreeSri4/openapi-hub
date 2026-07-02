@@ -9,7 +9,7 @@ export const Header: React.FC<HeaderProps> = ({ onNewUpload }) => {
     <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4 shadow-lg">
       <div className="max-w-full mx-auto flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">🔌 OpenAPI Hub</h1>
+          <h1 className="text-2xl font-bold">🔌 Vistex Industry Template API Hub</h1>
           <p className="text-blue-100 text-sm">
             Multi-tenant API Documentation
           </p>
