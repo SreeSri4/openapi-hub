@@ -10,7 +10,6 @@ import FileTemplatesPage from "./pages/FileTemplatesPage";
 export default function App() {
   return (
     <TenantDataProvider>
-      <div className="min-h-screen bg-white text-gray-900">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<TenantsPage />} />
@@ -21,7 +20,6 @@ export default function App() {
             <Route path="/tenants/:tenantId/file-templates" element={<FileTemplatesPage />} />
           </Routes>
         </BrowserRouter>
-      </div>
     </TenantDataProvider>
   );
 }
