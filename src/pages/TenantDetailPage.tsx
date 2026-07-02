@@ -9,9 +9,9 @@ export default function TenantDetailPage() {
 
   if (!tenant) {
     return (
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        <p className="text-gray-500">Tenant not found. It may not be loaded — go back and upload the JSON.</p>
-        <button onClick={() => navigate("/")} className="text-blue-600 text-sm mt-3">← Back to Tenants</button>
+      <div className="w-full px-6 md:px-10 lg:px-16 py-10">
+        <p className="text-blue-100/80">Tenant not found. It may not be loaded — go back and upload the JSON.</p>
+        <button onClick={() => navigate("/")} className="text-blue-300 text-sm mt-3">← Back to Tenants</button>
       </div>
     );
   }
@@ -23,10 +23,10 @@ export default function TenantDetailPage() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
-      <button onClick={() => navigate("/")} className="text-sm text-blue-600 mb-4">← Back to Tenants</button>
-      <h1 className="text-2xl font-semibold text-gray-900">{tenant.name}</h1>
-      <p className="text-gray-500 mt-1">{tenant.description}</p>
+    <div className="w-full px-6 md:px-10 lg:px-16 py-10">
+      <button onClick={() => navigate("/")} className="text-sm text-blue-300 mb-4">← Back to Tenants</button>
+      <h1 className="text-2xl font-semibold text-white">{tenant.name}</h1>
+      <p className="text-blue-100/80 mt-1">{tenant.description}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-8">
         {subsections.map((s) => (
