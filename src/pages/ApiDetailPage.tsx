@@ -114,7 +114,7 @@ function AuthorizePanel({
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-sm">✕</button>
       </div>
 
-      <div className="px-4 pt-3 flex gap-4 text-sm">
+      <div className="px-4 pt-3 flex flex-col gap-2 text-sm">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="radio"

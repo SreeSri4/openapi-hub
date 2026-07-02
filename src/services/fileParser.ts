@@ -1,4 +1,4 @@
-import { TenantConfig, Tenant } from '../types';
+import { TenantConfig } from '../types';
 
 export const parseConfigFile = (jsonString: string): TenantConfig => {
   try {
