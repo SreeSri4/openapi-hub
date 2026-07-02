@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { Tenant, TenantData } from "../types/tenant";
 
 const STORAGE_KEY = "openapi-hub-tenant-data";
-const DEFAULT_CONFIG_URL = "/public/sample-tenant-config.json"; // served from /public
+const DEFAULT_CONFIG_URL = "/sample-tenant-config.json"; // served from /public
 
 interface TenantContextValue {
   tenants: Tenant[];
