@@ -1,13 +1,13 @@
 ---
 applications:
-  - name: openapi-hub
-    memory: 512M
+  - name: vistex-template-api-hub
+    memory: 100M
+    disk_quota: 512M
     instances: 1
     buildpacks:
       - nodejs_buildpack
     command: npm start
     routes:
-      - route: openapi-hub.cfapps.us-south.containers.cloud.ibm.com
+      - route: vistex-template-api-hub.cfapps.eu10.hana.ondemand.com
     env:
       NODE_ENV: production
-      PORT: 8080
