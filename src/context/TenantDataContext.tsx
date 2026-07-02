@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { Tenant, TenantData } from "../types/tenant";
 
 const STORAGE_KEY = "openapi-hub-tenant-data";
+const DEFAULT_CONFIG_URL = "/sample-tenant-config.json"; // served from /public
 
 interface TenantContextValue {
   tenants: Tenant[];
@@ -17,27 +18,50 @@ export function TenantDataProvider({ children }: { children: ReactNode }) {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [loaded, setLoaded] = useState(false);
 
+  const applyParsed = (parsed: TenantData, persist: boolean) => {
+    if (!Array.isArray(parsed.tenants)) {
+      throw new Error("JSON must contain a top-level 'tenants' array.");
+    }
+    setTenants(parsed.tenants);
+    if (persist) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+  };
+
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       try {
         const parsed: TenantData = JSON.parse(raw);
         setTenants(parsed.tenants ?? []);
+        setLoaded(true);
+        return;
       } catch {
-        // ignore corrupt cache
+        // ignore corrupt cache, fall through to default load
       }
     }
-    setLoaded(true);
+
+    // No valid cached data yet — load the bundled sample config by default.
+    fetch(DEFAULT_CONFIG_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to fetch ${DEFAULT_CONFIG_URL}: ${res.status}`);
+        return res.json();
+      })
+      .then((parsed: TenantData) => {
+        setTenants(parsed.tenants ?? []);
+        // Not persisting to localStorage here, so the bundled default
+        // keeps loading fresh each visit until the user uploads their own file.
+      })
+      .catch((err) => {
+        console.error("Error loading default tenant config:", err);
+      })
+      .finally(() => setLoaded(true));
   }, []);
 
   const loadFromFile = async (file: File) => {
     const text = await file.text();
     const parsed: TenantData = JSON.parse(text);
-    if (!Array.isArray(parsed.tenants)) {
-      throw new Error("JSON must contain a top-level 'tenants' array.");
-    }
-    setTenants(parsed.tenants);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    applyParsed(parsed, true);
   };
 
   const clear = () => {
