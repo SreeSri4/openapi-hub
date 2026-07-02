@@ -285,17 +285,7 @@ export default function ApiDetailPage() {
   // our own panel above rather than Swagger UI's built-in Authorize dialog.
   const spec = useMemo(() => {
     if (!api) return null;
-    const converted = convertToOpenAPI(api as unknown as APIDefinition);
-    return {
-      ...converted,
-      components: {
-        ...(converted as any).components,
-        securitySchemes: {
-          bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" },
-        },
-      },
-      security: [{ bearerAuth: [] }],
-    };
+    return convertToOpenAPI(api as unknown as APIDefinition);
   }, [api]);
 
   if (!tenant || !api || !spec) {
