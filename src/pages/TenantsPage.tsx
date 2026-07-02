@@ -22,11 +22,11 @@ export default function TenantsPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="w-full px-6 md:px-10 lg:px-16 py-10">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Choose a Tenant to Explore</h1>
-          <p className="text-gray-500 mt-1">See the APIs, Events, and File Templates each tenant has to offer</p>
+          <h1 className="text-2xl font-semibold text-white">Choose a Tenant to Explore</h1>
+          <p className="text-blue-100/80 mt-1">See the APIs, Events, and File Templates each tenant has to offer</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -38,7 +38,7 @@ export default function TenantsPage() {
           {tenants.length > 0 && (
             <button
               onClick={clear}
-              className="px-4 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50"
+              className="px-4 py-2 border border-white/30 text-blue-50 rounded-lg text-sm font-medium hover:bg-white/10"
             >
               Clear
             </button>
@@ -47,14 +47,14 @@ export default function TenantsPage() {
         </div>
       </div>
 
-      {error && <p className="text-red-600 text-sm mt-4">{error}</p>}
+      {error && <p className="text-red-300 text-sm mt-4">{error}</p>}
 
       {tenants.length === 0 ? (
-        <div className="mt-16 text-center text-gray-400 border border-dashed border-gray-300 rounded-xl py-16">
+        <div className="mt-16 text-center text-blue-100/70 border border-dashed border-white/30 rounded-xl py-16">
           No tenant data loaded yet. Upload a JSON file to get started.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-8">
           {tenants.map((tenant) => (
             <button
               key={tenant.id}
