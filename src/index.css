@@ -20,4 +20,10 @@ html, body, #root {
 
 body {
   margin: 0;
+  background: linear-gradient(135deg, #143764 0%, #17406d 55%, #1c4370 100%);
+  background-attachment: fixed;
+}
+
+#root {
+  min-height: 100vh;
 }
