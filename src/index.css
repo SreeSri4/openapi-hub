@@ -27,3 +27,14 @@ body {
 #root {
   min-height: 100vh;
 }
+
+:root {
+  --color-bg: #ffffff;
+  --color-bg-alt: #f5f7fa;   /* subtle section tint, like Vistex's alternating sections */
+  --color-accent: #0b1f3d;   /* Vistex navy */
+}
+
+body {
+  background-color: var(--color-bg);
+  color: #1a1a1a;
+}

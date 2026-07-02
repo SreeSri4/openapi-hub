@@ -1,19 +1,19 @@
 {
   "tenants": [
     {
-      "id": "acme-001",
-      "name": "🏢 Acme Corporation",
-      "description": "Acme Corp API Suite",
+      "id": "MX",
+      "name": "🏭 Manufacturing",
+      "description": "Manufacturing Industry",
       "apis": [
         {
-          "id": "acme-users",
+          "id": "mfg-users",
           "name": "User Management API",
           "description": "Authentication & user management",
-          "baseUrl": "https://api.acme.com/v1",
+          "baseUrl": "https://api.manufacturing.com/v1",
           "version": "1.0.0",
           "contact": {
-            "name": "Acme Support",
-            "email": "support@acme.com"
+            "name": "Manufacturing Support",
+            "email": "support@manufacturing.com"
           },
           "license": {
             "name": "Apache 2.0"
@@ -154,10 +154,10 @@
           ]
         },
         {
-          "id": "acme-products",
+          "id": "mfg-products",
           "name": "Product Catalog API",
           "description": "Product & inventory management",
-          "baseUrl": "https://api.acme.com/v1",
+          "baseUrl": "https://api.manufacturing.com/v1",
           "version": "1.0.0",
           "endpoints": [
             {
@@ -212,22 +212,23 @@
       ]
     },
     {
-      "id": "beta-001",
-      "name": "🚀 Beta Inc",
-      "description": "Beta Inc API Suite",
+      "id": "price-staging-hub",
+      "name": "📊 Price Staging Hub",
+      "description": "Price Staging and Catalog Calculations Environment",
       "apis": [
         {
-          "id": "beta-analytics",
-          "name": "Analytics API",
-          "description": "Real-time analytics and reporting",
-          "baseUrl": "https://api.beta.com/v1",
-          "version": "2.0.0",
+          "id": "get-catalog-prices-api",
+          "name": "GetCatalogPrices API",
+          "description": "Price Catalog REST functions",
+          "baseUrl": "https://api.pricestaging.com/v1",
+          "version": "1.0.0",
           "endpoints": [
             {
-              "path": "/analytics/events",
+              "path": "/GetCatalogPrices",
               "method": "POST",
-              "summary": "Track an event",
-              "tags": ["Events"],
+              "summary": "Get Catalog Prices",
+              "description": "Fetches calculated pricing, deals, and promotional structures",
+              "tags": ["GetCatalogPrices"],
               "requestBody": {
                 "required": true,
                 "content": {
@@ -235,14 +236,30 @@
                     "schema": {
                       "type": "object",
                       "properties": {
-                        "event_name": {
-                          "type": "string"
-                        },
-                        "user_id": {
-                          "type": "string"
-                        },
-                        "properties": {
-                          "type": "object"
+                        "Header": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "PricingDate": { "type": "string", "format": "YYYY-MM-DD" },
+                              "Division": { "type": "string" },
+                              "CustomerID": { "type": "string" },
+                              "SalesOrganization": { "type": "string" },
+                              "DistributionChannel": { "type": "string" },
+                              "Currency": { "type": "string" },
+                              "Items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "ItemID": { "type": "string" },
+                                    "Quantity": { "type": "string" },
+                                    "Unit": { "type": "string" }
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -251,13 +268,103 @@
               },
               "responses": {
                 "200": {
-                  "description": "Event tracked successfully"
-                }
+                  "description": "Success",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "GetCatalogPrices": {
+                            "type": "object",
+                            "properties": {
+                              "Header": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "Error": { "type": "string" },
+                                    "PricingDate": { "type": "string", "format": "YYYY-MM-DD" },
+                                    "Division": { "type": "string" },
+                                    "CustomerID": { "type": "string" },
+                                    "SalesOrganization": { "type": "string" },
+                                    "DistributionChannel": { "type": "string" },
+                                    "Currency": { "type": "string" },
+                                    "Items": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "Error": { "type": "string" },
+                                          "ItemID": { "type": "string" },
+                                          "Quantity": { "type": "string" },
+                                          "Unit": { "type": "string" },
+                                          "Currency": { "type": "string" },
+                                          "Price": { "type": "string" },
+                                          "TotalPromotions": { "type": "string" },
+                                          "Calculations": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "Error": { "type": "string" },
+                                                "CalculationElement": { "type": "string" },
+                                                "ConditionRecord": { "type": "string" },
+                                                "CalculationRate": { "type": "string" },
+                                                "CalculationRateUnit": { "type": "string" },
+                                                "Per": { "type": "string" },
+                                                "PerUnit": { "type": "string" },
+                                                "CalculationValue": { "type": "string" },
+                                                "CalculationValueUnit": { "type": "string" },
+                                                "InternalDealID": { "type": "string" }
+                                              }
+                                            }
+                                          },
+                                          "Deals": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "Error": { "type": "string" },
+                                                "ExternalDealID": { "type": "string" },
+                                                "InternalDealID": { "type": "string" },
+                                                "DealDescription": { "type": "string" },
+                                                "DealAmount": { "type": "string" },
+                                                "DealCurrency": { "type": "string" },
+                                                "DealValidFrom": { "type": "string", "format": "YYYY-MM-DD" },
+                                                "DealValidTo": { "type": "string", "format": "YYYY-MM-DD" }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "206": { "description": "Partially Processed" },
+                "400": { "description": "Bad Request" },
+                "401": { "description": "Unauthorized" },
+                "404": { "description": "Not Found" },
+                "500": { "description": "Internal Server Error" },
+                "502": { "description": "Gateway Error" }
               }
             }
           ]
         }
       ]
+    },
+    {
+      "id": "wholesale-distribution",
+      "name": "🚚 Wholesale Distribution",
+      "description": "Wholesale logistics and partner shipping distribution channels",
+      "apis": []
     }
   ]
 }

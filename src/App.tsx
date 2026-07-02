@@ -10,16 +10,18 @@ import FileTemplatesPage from "./pages/FileTemplatesPage";
 export default function App() {
   return (
     <TenantDataProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<TenantsPage />} />
-          <Route path="/tenants/:tenantId" element={<TenantDetailPage />} />
-          <Route path="/tenants/:tenantId/apis" element={<ApisPage />} />
-          <Route path="/tenants/:tenantId/apis/:apiId" element={<ApiDetailPage />} />
-          <Route path="/tenants/:tenantId/events" element={<EventsPage />} />
-          <Route path="/tenants/:tenantId/file-templates" element={<FileTemplatesPage />} />
-        </Routes>
-      </BrowserRouter>
+      <div className="min-h-screen bg-white text-gray-900">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<TenantsPage />} />
+            <Route path="/tenants/:tenantId" element={<TenantDetailPage />} />
+            <Route path="/tenants/:tenantId/apis" element={<ApisPage />} />
+            <Route path="/tenants/:tenantId/apis/:apiId" element={<ApiDetailPage />} />
+            <Route path="/tenants/:tenantId/events" element={<EventsPage />} />
+            <Route path="/tenants/:tenantId/file-templates" element={<FileTemplatesPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </TenantDataProvider>
   );
 }
