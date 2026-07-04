@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
-import "../styles/swaggerDark.css";
 import { useTenantData } from "../context/TenantDataContext";
 import { convertToOpenAPI, specToJSON, specToYAML } from "../services/specConverter";
 import type { APIDefinition } from "../types";
@@ -262,7 +261,6 @@ export default function ApiDetailPage() {
 
   const [exportOpen, setExportOpen] = useState(false);
   const exportRef = useRef<HTMLDivElement>(null);
-  const [swaggerTheme, setSwaggerTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -366,15 +364,6 @@ export default function ApiDetailPage() {
 
             <div className="flex items-center gap-3 flex-shrink-0">
               <button
-                onClick={() => setSwaggerTheme((t) => (t === "light" ? "dark" : "light"))}
-                title={swaggerTheme === "light" ? "Switch docs to dark skin" : "Switch docs to light skin"}
-                aria-label="Toggle documentation theme"
-                className="w-9 h-9 flex items-center justify-center rounded-lg border border-white/30 bg-white/10 text-white hover:bg-white/20 transition"
-              >
-                {swaggerTheme === "light" ? "🌙" : "☀️"}
-              </button>
-
-              <button
                 onClick={() => setAuthOpen((o) => !o)}
                 className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap border transition ${
                   isAuthorized
@@ -440,11 +429,7 @@ export default function ApiDetailPage() {
       </div>
 
       <div className="w-full px-4 md:px-8 lg:px-12 py-6">
-        <div
-          className={`rounded-xl shadow-sm border overflow-hidden ${
-            swaggerTheme === "dark" ? "swagger-dark-theme bg-[#1e1e2e] border-[#3a3a52]" : "bg-white border-gray-200"
-          }`}
-        >
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <SwaggerUI
             key={effectiveToken || "anon"}
             spec={spec}
