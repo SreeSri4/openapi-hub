@@ -7,7 +7,6 @@ body {
   font-size: 1.0625rem;
   line-height: 1.6;
   color: #1a1a1a;
-  background-color: #ffffff;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -30,10 +29,10 @@ html, body, #root {
 
 body {
   margin: 0;
-  background-color: #eaf6fe;
-  background-attachment: fixed;
 }
 
 #root {
   min-height: 100vh;
+  background-color: #eaf6fe !important;
+  background-attachment: fixed;
 }
