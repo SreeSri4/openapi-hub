@@ -428,20 +428,22 @@ export default function ApiDetailPage() {
         </div>
       </div>
 
-      <div className="w-full">
-        <SwaggerUI
-          key={effectiveToken || "anon"}
-          spec={spec}
-          docExpansion="list"
-          defaultModelsExpandDepth={1}
-          deepLinking
-          requestInterceptor={(req: any) => {
-            if (effectiveToken) {
-              req.headers = { ...req.headers, Authorization: `Bearer ${effectiveToken}` };
-            }
-            return req;
-          }}
-        />
+      <div className="w-full px-4 md:px-8 lg:px-12 py-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <SwaggerUI
+            key={effectiveToken || "anon"}
+            spec={spec}
+            docExpansion="list"
+            defaultModelsExpandDepth={1}
+            deepLinking
+            requestInterceptor={(req: any) => {
+              if (effectiveToken) {
+                req.headers = { ...req.headers, Authorization: `Bearer ${effectiveToken}` };
+              }
+              return req;
+            }}
+          />
+        </div>
       </div>
     </div>
   );
