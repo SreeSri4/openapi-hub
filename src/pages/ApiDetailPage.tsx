@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
@@ -7,6 +7,14 @@ import { convertToOpenAPI, specToJSON, specToYAML } from "../services/specConver
 import type { APIDefinition } from "../types";
 
 const OAUTH_SCOPE = "GtmsApi";
+
+const METHOD_BADGE_COLOR: Record<string, string> = {
+  GET: "bg-green-100 text-green-800",
+  POST: "bg-blue-100 text-blue-800",
+  PUT: "bg-amber-100 text-amber-800",
+  PATCH: "bg-amber-100 text-amber-800",
+  DELETE: "bg-red-100 text-red-800",
+};
 
 function slugify(value: string): string {
   return value
@@ -251,6 +259,19 @@ export default function ApiDetailPage() {
   const effectiveToken = authMode === "bearer" ? appliedBearerToken : oauthToken ?? "";
   const isAuthorized = effectiveToken.length > 0;
 
+  const [exportOpen, setExportOpen] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (exportRef.current && !exportRef.current.contains(e.target as Node)) {
+        setExportOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleApplyBearer = () => setAppliedBearerToken(bearerInput.trim());
   const handleClearBearer = () => {
     setBearerInput("");
@@ -293,64 +314,95 @@ export default function ApiDetailPage() {
   }
 
   const fileBaseName = `${slugify(tenant.name)}-${slugify(api.name)}-openapi`;
+  const methods = Array.from(new Set(api.endpoints.map((e) => e.method.toUpperCase())));
 
   const handleDownloadJSON = () => {
     downloadFile(specToJSON(spec as any), `${fileBaseName}.json`, "application/json");
+    setExportOpen(false);
   };
 
   const handleDownloadYAML = () => {
     downloadFile(specToYAML(spec as any), `${fileBaseName}.yaml`, "application/yaml");
+    setExportOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-[#eaf6fe]">
-      <div className="relative bg-gradient-to-r from-[#0f2847] via-[#1a3e6f] to-[#2a5298] text-white px-6 md:px-10 lg:px-16 py-5 shadow-md">
-        <div className="w-full flex items-center justify-between flex-wrap gap-4">
-          <div className="min-w-0">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-tight">
-              API Documentation
-            </h1>
-            <p className="text-sm text-blue-100/80 mt-1 truncate">
-              Tenant: <span className="font-semibold text-white">{tenant.name}</span>
-              <span className="mx-2 text-blue-300/60">|</span>
-              Resource: <span className="font-semibold text-white">{api.name}</span>
-            </p>
-          </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <button
-              onClick={() => navigate(`/tenants/${tenantId}/apis`)}
-              className="px-4 py-2 bg-white/10 border border-white/30 text-white rounded-lg text-sm font-semibold hover:bg-white/20 whitespace-nowrap transition"
-            >
-              ← Back to Explorer
-            </button>
-            <button
-              onClick={handleDownloadJSON}
-              className="px-4 py-2 bg-white text-[#1a3e6f] rounded-lg text-sm font-semibold hover:bg-blue-50 whitespace-nowrap transition"
-              title="Download OpenAPI spec as JSON"
-            >
-              Download JSON
-            </button>
-            <button
-              onClick={handleDownloadYAML}
-              className="px-4 py-2 bg-white text-[#1a3e6f] rounded-lg text-sm font-semibold hover:bg-blue-50 whitespace-nowrap transition"
-              title="Download OpenAPI spec as YAML"
-            >
-              Download YAML
-            </button>
-            <button
-              onClick={() => setAuthOpen((o) => !o)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap border transition ${
-                isAuthorized
-                  ? "border-[#49cc90] bg-[#49cc90]/10 text-[#49cc90] hover:bg-[#49cc90]/20"
-                  : "border-white/30 bg-white/10 text-white hover:bg-white/20"
-              }`}
-            >
-              {isAuthorized ? "🔒 Authorized" : "🔓 Authorize"}
-            </button>
-          </div>
+      <div className="sticky top-0 z-40">
+        <div className="bg-[#0f2847] text-[#9fb8d9] text-xs px-6 md:px-10 lg:px-16 py-2 flex items-center gap-2 overflow-x-auto">
+          <button onClick={() => navigate("/")} className="hover:text-white whitespace-nowrap">Explorer</button>
+          <span aria-hidden="true">›</span>
+          <button onClick={() => navigate(`/tenants/${tenantId}`)} className="hover:text-white whitespace-nowrap">{tenant.name}</button>
+          <span aria-hidden="true">›</span>
+          <button onClick={() => navigate(`/tenants/${tenantId}/apis`)} className="hover:text-white whitespace-nowrap">APIs</button>
+          <span aria-hidden="true">›</span>
+          <span className="text-white font-medium whitespace-nowrap">{api.name}</span>
         </div>
 
-        {authOpen && (
+        <div className="relative bg-gradient-to-r from-[#0f2847] via-[#1a3e6f] to-[#2a5298] text-white px-6 md:px-10 lg:px-16 py-5 shadow-md">
+          <div className="w-full flex items-center justify-between flex-wrap gap-4">
+            <div className="min-w-0">
+              <div className="flex items-center gap-3 flex-wrap">
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-tight">
+                  {api.name}
+                </h1>
+                <div className="flex items-center gap-1.5">
+                  {methods.map((m) => (
+                    <span
+                      key={m}
+                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${METHOD_BADGE_COLOR[m] ?? "bg-gray-100 text-gray-800"}`}
+                    >
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              {api.baseUrl && (
+                <p className="text-xs md:text-sm text-blue-100/80 mt-1 font-mono truncate">{api.baseUrl}</p>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <button
+                onClick={() => setAuthOpen((o) => !o)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap border transition ${
+                  isAuthorized
+                    ? "border-[#49cc90] bg-[#49cc90]/10 text-[#49cc90] hover:bg-[#49cc90]/20"
+                    : "border-white/30 bg-white/10 text-white hover:bg-white/20"
+                }`}
+              >
+                {isAuthorized ? "🔒 Authorized" : "🔓 Authorize"}
+              </button>
+
+              <div className="relative" ref={exportRef}>
+                <button
+                  onClick={() => setExportOpen((o) => !o)}
+                  className="px-4 py-2 bg-white text-[#1a3e6f] rounded-lg text-sm font-semibold hover:bg-blue-50 whitespace-nowrap transition flex items-center gap-1.5"
+                >
+                  Export
+                  <span aria-hidden="true" className="text-xs">▾</span>
+                </button>
+                {exportOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-36 bg-white text-[#1a3e6f] rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+                    <button
+                      onClick={handleDownloadJSON}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-blue-50"
+                    >
+                      Download JSON
+                    </button>
+                    <button
+                      onClick={handleDownloadYAML}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-blue-50 border-t border-gray-100"
+                    >
+                      Download YAML
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {authOpen && (
           <AuthorizePanel
             authMode={authMode}
             setAuthMode={setAuthMode}
@@ -373,6 +425,7 @@ export default function ApiDetailPage() {
             onClose={() => setAuthOpen(false)}
           />
         )}
+        </div>
       </div>
 
       <div className="w-full">
