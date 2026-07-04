@@ -1,0 +1,132 @@
+/* Dark skin overrides for swagger-ui-react.
+   Scoped under .swagger-dark-theme so it never leaks outside the embedded
+   Swagger UI pane on ApiDetailPage. Toggle by adding/removing this class
+   on the pane wrapper. */
+
+.swagger-dark-theme .swagger-ui {
+  background: #1e1e2e;
+  color: #d4d4e0;
+  filter: none;
+}
+
+.swagger-dark-theme .swagger-ui .info .title,
+.swagger-dark-theme .swagger-ui .info h1,
+.swagger-dark-theme .swagger-ui .info h2,
+.swagger-dark-theme .swagger-ui .info h3,
+.swagger-dark-theme .swagger-ui .opblock-tag,
+.swagger-dark-theme .swagger-ui .opblock .opblock-summary-path,
+.swagger-dark-theme .swagger-ui .opblock .opblock-summary-description,
+.swagger-dark-theme .swagger-ui .parameter__name,
+.swagger-dark-theme .swagger-ui .parameter__type,
+.swagger-dark-theme .swagger-ui .response-col_status,
+.swagger-dark-theme .swagger-ui table thead tr td,
+.swagger-dark-theme .swagger-ui table thead tr th,
+.swagger-dark-theme .swagger-ui .model-title,
+.swagger-dark-theme .swagger-ui .model,
+.swagger-dark-theme .swagger-ui label {
+  color: #d4d4e0 !important;
+}
+
+.swagger-dark-theme .swagger-ui .info .base-url,
+.swagger-dark-theme .swagger-ui .opblock-description-wrapper p,
+.swagger-dark-theme .swagger-ui .opblock-external-docs-wrapper p,
+.swagger-dark-theme .swagger-ui .opblock-title_normal p,
+.swagger-dark-theme .swagger-ui .renderedMarkdown p,
+.swagger-dark-theme .swagger-ui .parameter__extension,
+.swagger-dark-theme .swagger-ui .parameter__in,
+.swagger-dark-theme .swagger-ui .response-col_description {
+  color: #9a9ab0 !important;
+}
+
+.swagger-dark-theme .swagger-ui .opblock {
+  background: #27273a;
+  border-color: #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui .opblock .opblock-section-header {
+  background: #27273a;
+  box-shadow: none;
+  border-bottom: 1px solid #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui .opblock-body pre.microlight,
+.swagger-dark-theme .swagger-ui .highlight-code {
+  background: #15151f !important;
+  color: #d4d4e0;
+}
+
+.swagger-dark-theme .swagger-ui .tab li,
+.swagger-dark-theme .swagger-ui .opblock-tag small {
+  color: #9a9ab0;
+}
+
+.swagger-dark-theme .swagger-ui .model-box {
+  background: #27273a;
+}
+
+.swagger-dark-theme .swagger-ui select,
+.swagger-dark-theme .swagger-ui input[type="text"],
+.swagger-dark-theme .swagger-ui input[type="password"],
+.swagger-dark-theme .swagger-ui input[type="file"],
+.swagger-dark-theme .swagger-ui textarea {
+  background: #15151f;
+  color: #d4d4e0;
+  border-color: #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui table tbody tr td {
+  border-bottom: 1px solid #3a3a52;
+  color: #d4d4e0;
+}
+
+.swagger-dark-theme .swagger-ui .responses-inner h4,
+.swagger-dark-theme .swagger-ui .responses-inner h5 {
+  color: #d4d4e0;
+}
+
+.swagger-dark-theme .swagger-ui .scheme-container {
+  background: #1e1e2e;
+  box-shadow: none;
+  border-bottom: 1px solid #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui .btn {
+  color: #d4d4e0;
+  border-color: #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui .btn.authorize {
+  color: #49cc90;
+  border-color: #49cc90;
+}
+
+.swagger-dark-theme .swagger-ui .btn.execute {
+  background: #2a5298;
+  color: #fff;
+  border-color: #2a5298;
+}
+
+.swagger-dark-theme .swagger-ui section.models {
+  border-color: #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui section.models .model-container {
+  background: #27273a;
+}
+
+.swagger-dark-theme .swagger-ui section.models h4 {
+  color: #d4d4e0;
+  border-bottom-color: #3a3a52;
+}
+
+.swagger-dark-theme .swagger-ui .prop-type {
+  color: #7ab6ff;
+}
+
+.swagger-dark-theme .swagger-ui .property.primitive {
+  color: #9a9ab0;
+}
+
+.swagger-dark-theme .swagger-ui .copy-to-clipboard {
+  background: #3a3a52;
+}
