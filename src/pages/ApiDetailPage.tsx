@@ -234,8 +234,6 @@ export default function ApiDetailPage() {
   const tenant = getTenant(tenantId!);
   const api = tenant?.apis.find((a) => a.id === apiId);
 
-  const [collapsed, setCollapsed] = useState(false);
-
   // --- custom authorize state (replaces Swagger UI's built-in Authorize dialog) ---
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("bearer");
@@ -291,7 +289,7 @@ export default function ApiDetailPage() {
   }, [api]);
 
   if (!tenant || !api || !spec) {
-    return <p className="w-full px-6 md:px-10 lg:px-16 py-10 text-blue-100/80">API not found.</p>;
+    return <p className="w-full px-6 md:px-10 lg:px-16 py-10 text-slate-600">API not found.</p>;
   }
 
   const fileBaseName = `${slugify(tenant.name)}-${slugify(api.name)}-openapi`;
@@ -305,49 +303,49 @@ export default function ApiDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
-      <div className="relative bg-[#1b1b1b] text-white px-6 md:px-10 lg:px-16 py-3">
-        <div className="w-full flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-4 min-w-0">
-            <span className="font-semibold tracking-wide text-sm whitespace-nowrap">🔌 Vistex Industry Template API Hub</span>
+    <div className="min-h-screen bg-[#eaf6fe]">
+      <div className="relative bg-gradient-to-r from-[#0f2847] via-[#1a3e6f] to-[#2a5298] text-white px-6 md:px-10 lg:px-16 py-5 shadow-md">
+        <div className="w-full flex items-center justify-between flex-wrap gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-tight">
+              API Documentation
+            </h1>
+            <p className="text-sm text-blue-100/80 mt-1 truncate">
+              Tenant: <span className="font-semibold text-white">{tenant.name}</span>
+              <span className="mx-2 text-blue-300/60">|</span>
+              Resource: <span className="font-semibold text-white">{api.name}</span>
+            </p>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => navigate(`/tenants/${tenantId}/apis`)}
-              className="text-xs text-blue-300 hover:text-blue-200 whitespace-nowrap"
+              className="px-4 py-2 bg-white/10 border border-white/30 text-white rounded-lg text-sm font-semibold hover:bg-white/20 whitespace-nowrap transition"
             >
-              ← Back to {tenant.name} APIs
+              ← Back to Explorer
             </button>
-          </div>
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-xs text-gray-400 font-mono truncate hidden sm:inline">{api.baseUrl}</span>
             <button
               onClick={handleDownloadJSON}
-              className="text-xs border border-gray-600 text-gray-300 px-2 py-1 rounded hover:bg-white/10 whitespace-nowrap"
+              className="px-4 py-2 bg-white text-[#1a3e6f] rounded-lg text-sm font-semibold hover:bg-blue-50 whitespace-nowrap transition"
               title="Download OpenAPI spec as JSON"
             >
-              ⬇ JSON
+              Download JSON
             </button>
             <button
               onClick={handleDownloadYAML}
-              className="text-xs border border-gray-600 text-gray-300 px-2 py-1 rounded hover:bg-white/10 whitespace-nowrap"
+              className="px-4 py-2 bg-white text-[#1a3e6f] rounded-lg text-sm font-semibold hover:bg-blue-50 whitespace-nowrap transition"
               title="Download OpenAPI spec as YAML"
             >
-              ⬇ YAML
+              Download YAML
             </button>
             <button
               onClick={() => setAuthOpen((o) => !o)}
-              className={`text-xs px-2 py-1 rounded whitespace-nowrap font-semibold border ${
+              className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap border transition ${
                 isAuthorized
-                  ? "border-[#49cc90] text-[#49cc90] hover:bg-[#49cc90]/10"
-                  : "border-gray-600 text-gray-300 hover:bg-white/10"
+                  ? "border-[#49cc90] bg-[#49cc90]/10 text-[#49cc90] hover:bg-[#49cc90]/20"
+                  : "border-white/30 bg-white/10 text-white hover:bg-white/20"
               }`}
             >
               {isAuthorized ? "🔒 Authorized" : "🔓 Authorize"}
-            </button>
-            <button
-              onClick={() => setCollapsed((c) => !c)}
-              className="text-xs border border-gray-600 text-gray-300 px-2 py-1 rounded hover:bg-white/10 whitespace-nowrap"
-            >
-              {collapsed ? "Expand All" : "Collapse All"}
             </button>
           </div>
         </div>
@@ -379,9 +377,9 @@ export default function ApiDetailPage() {
 
       <div className="w-full">
         <SwaggerUI
-          key={`${collapsed ? "collapsed" : "expanded"}-${effectiveToken || "anon"}`}
+          key={effectiveToken || "anon"}
           spec={spec}
-          docExpansion={collapsed ? "none" : "list"}
+          docExpansion="list"
           defaultModelsExpandDepth={1}
           deepLinking
           requestInterceptor={(req: any) => {

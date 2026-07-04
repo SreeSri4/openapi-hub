@@ -15,15 +15,15 @@ export default function ApisPage() {
   const { getTenant } = useTenantData();
   const tenant = getTenant(tenantId!);
 
-  if (!tenant) return <p className="w-full px-6 md:px-10 lg:px-16 py-10 text-blue-100/80">Tenant not found.</p>;
+  if (!tenant) return <p className="w-full px-6 md:px-10 lg:px-16 py-10 text-slate-600">Tenant not found.</p>;
 
   return (
     <div className="w-full px-6 md:px-10 lg:px-16 py-10">
-      <button onClick={() => navigate(`/tenants/${tenantId}`)} className="text-sm text-blue-300 mb-4">
+      <button onClick={() => navigate(`/tenants/${tenantId}`)} className="text-sm text-blue-600 mb-4">
         ← Back to {tenant.name}
       </button>
-      <h1 className="text-2xl font-semibold text-white">APIs — {tenant.name}</h1>
-      <p className="text-blue-100/80 mt-1">{tenant.apis?.length ?? 0} API{tenant.apis?.length === 1 ? "" : "s"} available</p>
+      <h1 className="text-2xl font-semibold text-slate-900">APIs — {tenant.name}</h1>
+      <p className="text-slate-600 mt-1">{tenant.apis?.length ?? 0} API{tenant.apis?.length === 1 ? "" : "s"} available</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-8">
         {(tenant.apis ?? []).map((api) => {

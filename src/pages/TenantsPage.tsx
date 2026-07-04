@@ -25,8 +25,8 @@ export default function TenantsPage() {
     <div className="w-full px-6 md:px-10 lg:px-16 py-10">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Choose a Tenant to Explore</h1>
-          <p className="text-blue-100/80 mt-1">See the APIs, Events, and File Templates each tenant has to offer</p>
+          <h1 className="text-2xl font-semibold text-slate-900">Choose a Tenant to Explore</h1>
+          <p className="text-slate-600 mt-1">See the APIs, Events, and File Templates each tenant has to offer</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -38,7 +38,7 @@ export default function TenantsPage() {
           {tenants.length > 0 && (
             <button
               onClick={clear}
-              className="px-4 py-2 border border-white/30 text-blue-50 rounded-lg text-sm font-medium hover:bg-white/10"
+              className="px-4 py-2 border border-blue-200 bg-white text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-50"
             >
               Clear
             </button>
@@ -47,10 +47,10 @@ export default function TenantsPage() {
         </div>
       </div>
 
-      {error && <p className="text-red-300 text-sm mt-4">{error}</p>}
+      {error && <p className="text-red-600 text-sm mt-4">{error}</p>}
 
       {tenants.length === 0 ? (
-        <div className="mt-16 text-center text-blue-100/70 border border-dashed border-white/30 rounded-xl py-16">
+        <div className="mt-16 text-center text-slate-500 bg-white border border-dashed border-slate-300 rounded-xl py-16">
           No tenant data loaded yet. Upload a JSON file to get started.
         </div>
       ) : (
